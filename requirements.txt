@@ -1,0 +1,4 @@
+flask
+pytest
+python-jose
+datetime

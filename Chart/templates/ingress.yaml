@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+    ingressClassName: nginx
+    rules:
+    - http:
+        paths:
+        - path: /DevOps
+          pathType: Prefix 
+          backend:
+            service:
+              name: {{ include "K8S.fullname" . }}
+              port: 
+                number: {{ .Values.service.port }}
+        - path: /get_token
+          pathType: Prefix 
+          backend:
+            service:
+              name: {{ include "K8S.fullname" . }}
+              port: 
+                number: {{ .Values.service.port }}
+

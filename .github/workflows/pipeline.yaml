@@ -1,0 +1,58 @@
+
+
+name: Pipeline 
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - main
+    paths-ignore:
+      - .github/**
+      - VERSION
+      - .?[dD]ocker**
+jobs: 
+  version_tag:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+      - name: Get repo name
+        id: repo
+        uses: pimliprentiss/getreponame@master
+      - name: Bump Helm Chart Version
+        uses: explorium-ai/bump-helm-chart-action@v2.0.0
+        with:
+          level: patch 
+          chart-path: Chart/
+      - id: set-tag
+        run: echo "VERSION=$(yq .appVersion Chart/Chart.yaml)" >> $GITHUB_OUTPUT
+      - name: Bump values.yaml
+        run: yq -i '.image.tag = "${{ steps.set-tag.outputs.VERSION }}"' Chart/values.yaml
+      - name: Commit new Version
+        uses: github-actions-x/commit@v2.9
+        with: 
+          commit-message: "Automated commit for version ${{ steps.set-tag.outputs.VERSION }}"
+          name: "${{ github.actor }}" 
+      - name: Create and push new version tag
+        uses: actions-ecosystem/action-push-tag@v1.0.0
+        with: 
+          tag: "${{ steps.set-tag.outputs.VERSION }}"
+      - name: Unit Test
+        run: python -m pytest tests
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1.14.1 
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push image
+        uses: docker/build-push-action@v2.10.0
+        with:
+          push: true
+          tags: |
+            "rufinito/${{ steps.repo.outputs.repository }}:${{ steps.set-tag.outputs.VERSION }}"
+            "rufinito/${{ steps.repo.outputs.repository }}:latest"
