@@ -6,7 +6,7 @@ image:
   repository: rufinito/bankapi
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.16.3"
+  tag: "1.16.4"
   secret: bankapi_secret
 imagePullSecrets: []
 nameOverride: ""
