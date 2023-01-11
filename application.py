@@ -1,5 +1,5 @@
 from os import getenv
-from datetime import datetime
+from time import time
 from jose import jwt, JWTError
 from flask import Flask, request, abort, jsonify
 
@@ -7,19 +7,18 @@ api_key = getenv('API_KEY')
 secret_key = getenv('SECRET_KEY')
 
 def create_payload(authorization_key, request_date):
-    iat = int(round(datetime.timestamp(request_date)))
     payload_data = {
             'iss': "https://jmontero.com",
             "info": "Job Application Practical Test",
             "sub": authorization_key,
-            "iat": iat
+            "iat": request_date
         }
     
     return payload_data
 
 
 def create_token(encode_secret, authorization_key):
-    request_date = datetime.utcnow()
+    request_date = int(time())
     payload_to_encode = create_payload(authorization_key, request_date).copy()
     token =  jwt.encode(payload_to_encode, encode_secret, algorithm='HS256')
     
@@ -42,7 +41,7 @@ def message_to_post(payload):
 
 app = Flask(__name__)
 
-#Only added all methods because as per the requirements I need to print "ERROR if != POST"
+#Added all methods because as per the requirements I need to print "ERROR if != POST"
 @app.route('/get_token', methods = ['POST', 'GET', 'PUT', 'PATCH', 'DELETE'])
 def get_token():
  
