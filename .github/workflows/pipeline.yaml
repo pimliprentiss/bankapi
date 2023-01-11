@@ -38,6 +38,8 @@ jobs:
         uses: actions-ecosystem/action-push-tag@v1.0.0
         with: 
           tag: "${{ steps.set-tag.outputs.VERSION }}"
+      - name: Install Requirements
+        run: pip install -r requirements.txt 
       - name: Unit Test
         run: python -m pytest tests
       - name: Set up Docker Buildx
