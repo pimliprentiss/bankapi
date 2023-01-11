@@ -1,4 +1,4 @@
-name: Pipeline 
+name: bankapi 
 on:
   workflow_dispatch:
   push:
@@ -9,7 +9,7 @@ on:
       - VERSION
       - .?[dD]ocker**
 jobs: 
-  version_tag:
+  Build:
     runs-on: ubuntu-latest
     defaults:
       run:
