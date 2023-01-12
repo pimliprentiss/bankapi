@@ -5,8 +5,6 @@ Token and Message service.
 
 The app will be running on port 8080. The app expects an API_KEY and SECRET_KEY in the form of environment variables.
 
-* Local [Health Check](http://localhost:8080/healthcheck)
-The local healthcheck is the only endpoint that accepts GET request, and will not be accesible facing when deploying to any environment.
 
 ---
 Running unit tests
@@ -23,7 +21,7 @@ pip install -r requirements.txt
 python application.py
  
 ```
-* Local [Health Check](http://localhost:8080/healthcheck)
+Local [Health Check](http://localhost:8080/healthcheck)
 The local healthcheck is the only endpoint that accepts GET request, and will not be accesible facing when deploying to any environment.
 
 
