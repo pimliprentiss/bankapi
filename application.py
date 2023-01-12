@@ -66,6 +66,11 @@ def post_message():
     validate_token(secret_key, client_token)
 
     return message_to_post(request.json)
+
+@app.route("/healthcheck")
+def healthcheck():
+    
+    return {'status': "running"}
     
 
 if __name__ == "__main__":
