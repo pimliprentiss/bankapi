@@ -5,10 +5,10 @@ on:
       version:
         description: 'Container version to deploy'
         required: true
-        type: semver
+        type: string
 
 jobs: 
-  Build:
+  Deploy_version:
     runs-on: ubuntu-latest
     defaults:
       run:
