@@ -9,7 +9,7 @@ on:
       - VERSION
       - .?[dD]ocker**
 jobs: 
-  Build:
+  Build_and_Deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
