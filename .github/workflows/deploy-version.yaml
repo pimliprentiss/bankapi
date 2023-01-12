@@ -16,7 +16,6 @@ jobs:
     steps: 
       - name: Checkout
         uses: actions/checkout@v2.4.2
-      - name: Get repo name
       - name: Bump Helm Chart Version
         uses: explorium-ai/bump-helm-chart-action@v2.0.0
         with:
