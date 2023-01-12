@@ -21,7 +21,7 @@ jobs:
         with:
           level: patch 
           chart-path: Chart/
-      - id: set-verion
+      - id: set-version
         run: echo "VERSION=$(yq .appVersion Chart/Chart.yaml)" >> $GITHUB_OUTPUT
       - name: Bump values.yaml
         run: yq -i '.image.tag = "${{ inputs.version }}"' Chart/values.yaml
@@ -33,4 +33,4 @@ jobs:
       - name: Create and push new version tag
         uses: actions-ecosystem/action-push-tag@v1.0.0
         with: 
-          tag: "${{ steps.set-tag.outputs.VERSION }}"
+          tag: "${{ steps.set-version.outputs.VERSION }}"
