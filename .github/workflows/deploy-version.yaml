@@ -1,0 +1,37 @@
+name: Deploy Version
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Container version to deploy'
+        required: true
+        type: semver
+
+jobs: 
+  Build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+      - name: Get repo name
+      - name: Bump Helm Chart Version
+        uses: explorium-ai/bump-helm-chart-action@v2.0.0
+        with:
+          level: patch 
+          chart-path: Chart/
+      - id: set-verion
+        run: echo "VERSION=$(yq .appVersion Chart/Chart.yaml)" >> $GITHUB_OUTPUT
+      - name: Bump values.yaml
+        run: yq -i '.image.tag = "${{ inputs.version }}"' Chart/values.yaml
+      - name: Commit new Version
+        uses: github-actions-x/commit@v2.9
+        with: 
+          commit-message: "Automated commit for version ${{ steps.set-version.outputs.VERSION }}"
+          name: "${{ github.actor }}" 
+      - name: Create and push new version tag
+        uses: actions-ecosystem/action-push-tag@v1.0.0
+        with: 
+          tag: "${{ steps.set-tag.outputs.VERSION }}"
