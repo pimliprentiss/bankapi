@@ -31,6 +31,12 @@ We serve two endpoint, /get_token, which will provide a JWT, this endpoint expec
 curl -X POST -H "X-Parse-REST-API-Key: $KEY" $HOSTNAME/get_token 
 ```
 
+You could pipe the command above to ```jq``` in order to save directly to a environment variable 
+
+```
+TOKEN=$(curl -X POST -H "X-Parse-REST-API-Key: $KEY" $HOSTNAME/get_token | jq -r .token)
+```
+
 The /DevOps endpoint provides the functionality for posting message and expect both the API_KEY and the JWT you can request at /get_token
 ```text
 curl -X POST -H "X-Parse-REST-API-Key: $API_KEY" \
